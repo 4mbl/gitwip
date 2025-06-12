@@ -7,9 +7,7 @@ import sys
 from pathlib import Path
 from shutil import which
 
-ANSI_HEADER = '\033[1;36m'  # bright cyan
-ANSI_BRANCH = '\033[0;33m'  # yellow
-ANSI_RESET = '\033[0m'
+from fortext import Fg, style
 
 
 def p(*values: object) -> None:
@@ -99,9 +97,9 @@ def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bo
                 display_path = f'~/{repo_path.relative_to(home)}'
             except ValueError:
                 display_path = str(repo_path)
-            p(f'{ANSI_HEADER}=== {display_path} ==={ANSI_RESET}')
+            p(style(f'=== {display_path} ===', Fg.BRIGHT_CYAN))
             for branch in branches:
-                p(f'{ANSI_BRANCH}* {branch}{ANSI_RESET}')
+                p(style(f'* {branch}', Fg.YELLOW))
             p()
 
 
