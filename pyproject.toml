@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gitwip"
+version = "0.0.1"
+description = ""
+authors = [{ name = "4MBL" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+keywords = []
+classifiers = [
+    "Environment :: Console",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.scripts]
+gitwip = "gitwip.main:main"
+
+[project.urls]
+Homepage = "https://github.com/4mbl/gitwip"
+"Bug Tracker" = "https://github.com/4mbl/gitwip/issues"
+Changelog = "https://github.com/4mbl/gitwip/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/4mbl/gitwip/blob/main/README.md"
+Repository = "https://github.com/4mbl/gitwip"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D203", "D213", "ISC001", "COM812"]
+exclude = ["tests"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
