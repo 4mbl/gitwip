@@ -29,7 +29,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = ["fortext>=1.1.0, <1.2.0"]
+dependencies = ["fortext>=1.1.1, <1.2.0"]
 
 [project.scripts]
 gitwip = "gitwip.main:main"
