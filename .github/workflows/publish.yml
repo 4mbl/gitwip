@@ -1,0 +1,38 @@
+name: CI - Publish
+
+on:
+  release:
+    types: [created]
+
+env:
+  LATEST_PYTHON_VERSION: 3.13
+
+jobs:
+  publish:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install build
+
+      - name: Build package
+        run: |
+          python3 -m pip install build
+          rm -rf dist
+          python3 -m build
+      - name: Publish package to PyPI
+        run: |
+          python3 -m pip install twine
+          python3 -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
+      - name: Attach binaries to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
