@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "gitwip"
 version = "0.1.0"
-description = ""
+description = "Lists non-primary git branches in a directory tree."
 authors = [{ name = "4MBL" }]
 readme = "README.md"
 license = { file = "LICENSE" }

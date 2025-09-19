@@ -1,6 +1,6 @@
 # [gitwip](https://4mbl.link/gh/gitwip)
 
-> Lists branches you have been working on across repos in a directory tree.
+> Lists non-primary git branches in a directory tree.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@
 Use pip to install `gitwip`.
 
 ```bash
-pip install --upgrade <PACKAGE_NAME>
+pip install --upgrade gitwip
 ```
 
 ## Usage
