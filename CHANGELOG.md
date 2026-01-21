@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-<!-- ## Unreleased
+## Unreleased
 
 ### Added
 
 ### Changed
+
+- Separate CLI functionality from core functionality.
 
 ### Fixed
 
@@ -17,8 +19,6 @@ All notable changes to this project will be documented in this file.
 ### Known Issues
 
 ---
-
--->
 
 ## 0.1.0 | 2025-09-19
 
