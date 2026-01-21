@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Fix primary branch detection when something other than 'main' or 'master' is used.
+
 ### Removed
 
 ### Known Issues

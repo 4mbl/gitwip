@@ -47,7 +47,7 @@ def get_git_repos(root: Path, *, skip_hidden_dirs: bool) -> list[Path]:
 
 
 def get_repo_branches(repo_path: Path, git_path: Path) -> list[str]:
-    """Get the list of non-main/non-master branches in a Git repository."""
+    """Get the list of branches in a Git repository."""
     try:
         result = subprocess.run(  # noqa: S603
             [git_path.as_posix(), '-C', str(repo_path), 'branch', '--format=%(refname:short)'],
@@ -55,8 +55,7 @@ def get_repo_branches(repo_path: Path, git_path: Path) -> list[str]:
             capture_output=True,
             text=True,
         )
-        branches = [line.strip() for line in result.stdout.strip().splitlines()]
-        return [b for b in branches if b not in {'main', 'master'}]
+        return [line.strip() for line in result.stdout.strip().splitlines()]
     except subprocess.CalledProcessError:
         return []
 
@@ -85,12 +84,14 @@ def get_repo_name(repo_path: Path, git_path: Path) -> str | None:
 
 
 def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bool) -> None:
-    """Find all Git repositories under root and print their non-main/master branches."""
+    """Find all Git repositories under root and print their non-primary branches."""
     home = Path.home().resolve()
     repo_paths = {p.resolve() for p in get_git_repos(root, skip_hidden_dirs=skip_hidden_dirs)}
 
     for repo_path in sorted(repo_paths):
-        branches = get_repo_branches(repo_path, git_path)
+        all_branches = get_repo_branches(repo_path, git_path)
+        primary_branch = get_primary_branch(repo_path, git_path)
+        branches = [b for b in all_branches if b != primary_branch]
         if branches:
             try:
                 display_path = f'~/{repo_path.relative_to(home)}'
@@ -100,3 +101,39 @@ def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bo
             for branch in branches:
                 p(style(f'* {branch}', Fg.YELLOW))
             p()
+
+
+def get_primary_branch(repo_path: Path, git_path: Path) -> str | None:
+    """Get the name of the primary branch in a Git repository."""
+
+    def _run_git(args: list[str]) -> str | None:
+        try:
+            result = subprocess.run(  # noqa: S603
+                [git_path.as_posix(), '-C', str(repo_path), *args],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,  # suppress fatal messages
+                text=True,
+            )
+            return result.stdout.strip()
+        except subprocess.CalledProcessError:
+            return None
+
+    # 1: origin/HEAD
+    ref = _run_git(['symbolic-ref', 'refs/remotes/origin/HEAD'])
+    if ref:
+        return ref.removeprefix('refs/remotes/origin/')
+
+    # 2️: remote show origin
+    output = _run_git(['remote', 'show', 'origin'])
+    if output:
+        for line in output.splitlines():
+            if 'HEAD branch:' in line:
+                return line.split(':', 1)[1].strip()
+
+    # 3️: main/master
+    for branch in ('main', 'master'):
+        if _run_git(['show-ref', '--verify', f'refs/heads/{branch}']):
+            return branch
+
+    return None
