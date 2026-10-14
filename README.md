@@ -1,13 +1,13 @@
 # [gitwip](https://4mbl.link/gh/gitwip)
 
-> Lists non-primary git branches in a directory tree.
+> Lists non-primary Git branches and stashes in a directory tree.
 
 ## Table of Contents
 
-* [Table of Contents](#table-of-contents)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [License](#license)
+- [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
 
 ### Installation
 

@@ -10,7 +10,7 @@ from gitwip.main import find_repos_with_branches, get_git_path, p
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description='List non-main/non-master Git branches in a directory tree.'
+        description='List non-primary Git branches and stashes in a directory tree.'
     )
     parser.add_argument('path', type=Path, help='Root directory to scan for Git repositories.')
     parser.add_argument(
