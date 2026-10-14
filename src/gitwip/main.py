@@ -1,4 +1,4 @@
-"""List non-primary Git branches in a directory tree."""
+"""List non-primary Git branches and stashes in a directory tree."""
 
 import os
 import subprocess
@@ -60,6 +60,20 @@ def get_repo_branches(repo_path: Path, git_path: Path) -> list[str]:
         return []
 
 
+def get_repo_stashes(repo_path: Path, git_path: Path) -> list[str]:
+    """Get the stash references and messages in a Git repository."""
+    try:
+        result = subprocess.run(  # noqa: S603
+            [git_path.as_posix(), '-C', str(repo_path), 'stash', 'list', '--format=%gd: %s'],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return result.stdout.splitlines()
+    except subprocess.CalledProcessError:
+        return []
+
+
 def get_repo_name(repo_path: Path, git_path: Path) -> str | None:
     """Try to extract a friendly name for a Git repository based on its remote origin URL."""
     try:
@@ -84,7 +98,7 @@ def get_repo_name(repo_path: Path, git_path: Path) -> str | None:
 
 
 def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bool) -> None:
-    """Find all Git repositories under root and print their non-primary branches."""
+    """Print repositories with non-primary branches or stashes."""
     home = Path.home().resolve()
     repo_paths = {p.resolve() for p in get_git_repos(root, skip_hidden_dirs=skip_hidden_dirs)}
 
@@ -92,7 +106,8 @@ def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bo
         all_branches = get_repo_branches(repo_path, git_path)
         primary_branch = get_primary_branch(repo_path, git_path)
         branches = [b for b in all_branches if b != primary_branch]
-        if branches:
+        stashes = get_repo_stashes(repo_path, git_path)
+        if branches or stashes:
             try:
                 display_path = f'~/{repo_path.relative_to(home)}'
             except ValueError:
@@ -100,6 +115,8 @@ def find_repos_with_branches(root: Path, git_path: Path, *, skip_hidden_dirs: bo
             p(style(f'=== {display_path} ===', Fg.BRIGHT_CYAN))
             for branch in branches:
                 p(style(f'* {branch}', Fg.YELLOW))
+            for stash in stashes:
+                p(style(f'* {stash}', Fg.MAGENTA))
             p()
 
 

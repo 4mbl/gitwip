@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- List Git stashes alongside non-primary branches.
+
 ### Changed
 
 - Separate CLI functionality from core functionality.
