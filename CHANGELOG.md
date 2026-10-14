@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add a `--version` flag to print the installed package version.
 - List Git stashes alongside non-primary branches.
 
 ### Changed

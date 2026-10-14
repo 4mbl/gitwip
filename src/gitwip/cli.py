@@ -2,15 +2,34 @@
 
 import argparse
 import sys
+from importlib.metadata import version
 from pathlib import Path
 
 from gitwip.main import find_repos_with_branches, get_git_path, p
+
+
+class VersionAction(argparse.Action):
+    """Print the installed package version when requested."""
+
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        _namespace: argparse.Namespace,
+        _values: object,
+        _option_string: str | None = None,
+    ) -> None:
+        """Exit after printing the version."""
+        sys.stdout.write(f'{parser.prog} {version("gitwip")}\n')
+        parser.exit()
 
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description='List non-primary Git branches and stashes in a directory tree.'
+    )
+    parser.add_argument(
+        '--version', action=VersionAction, nargs=0, help='Show the version and exit.'
     )
     parser.add_argument('path', type=Path, help='Root directory to scan for Git repositories.')
     parser.add_argument(
