@@ -29,7 +29,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = ["fortext>=1.1.2, <2.1.0"]
+dependencies = ["fortext>=2.0.0, <2.1.0"]
 
 [project.scripts]
 gitwip = "gitwip.cli:cli"
@@ -46,7 +46,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D203", "D213", "ISC001", "COM812"]
+ignore = ["D203", "D213", "ISC001", "COM812", "CPY001"]
 exclude = ["tests"]
 
 [tool.ruff.format]
